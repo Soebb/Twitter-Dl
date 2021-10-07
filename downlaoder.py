@@ -47,10 +47,6 @@ def download_tweet(tweet_url):
                     urls.append(media_variants[0]['url'])
             return urls
         except AttributeError:
-            return "No Media"
+            return "Media Not Found"
     except:
         return "Not Found"
-
-
-print(download_tweet("https://twitter.com/realDonaldTrump/status/1245244501882667264"))
-
