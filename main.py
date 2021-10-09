@@ -1,8 +1,18 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from pdb import set_trace
 
 from downlaoder import download_tweet
 
 app = Flask(__name__)
+
+@app.errorhandler(404)
+def resource_not_found(error):
+    """
+    An error-handler to ensure that 404 errors are returned as JSON.
+    """
+    return {
+        'error': str(error),
+    }
 
 @app.route("/")
 def index():
@@ -14,6 +24,11 @@ def index():
 @app.route("/tweet/dl")
 def tweet_dl():
     tweet_id = request.args.get("tweet_id")
+    if type(tweet_id) is type(None):
+        return {
+            "error": "No tweet_id provided"
+        }, 400
+    
     links = download_tweet(tweet_id)
     if links == 'Not Found':
         return {
